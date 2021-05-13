@@ -5,6 +5,7 @@
 
 # app-sensitive-files
 config.js
+package-lock.json
 
 # User-specific files
 *.rsuser
