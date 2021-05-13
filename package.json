@@ -1,0 +1,19 @@
+{
+  "name": "merng-stack",
+  "version": "1.0.0",
+  "description": "MERNG-STACK project demo",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yukselcodingwithyou/merng-stack.git"
+  },
+  "author": "yukselcodingwithyou",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yukselcodingwithyou/merng-stack/issues"
+  },
+  "homepage": "https://github.com/yukselcodingwithyou/merng-stack#readme"
+}
