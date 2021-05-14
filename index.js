@@ -10,7 +10,8 @@ const { MONGO_CONNECTION_STRING } = require('./config.js')
 const server = new ApolloServer({
     typeDefs,
     resolvers,
-    debug: false // include or omit stacktrace
+    context: ({ req }) => ({ req }), // pass the request for authentication
+    debug: false, // include or omit stacktracex
 });
 
 mongoose.connect(MONGO_CONNECTION_STRING, { useNewUrlParser: true, useUnifiedTopology: true })
