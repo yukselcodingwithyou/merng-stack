@@ -1,6 +1,6 @@
 const { AuthenticationError, UserInputError } = require('apollo-server');
 
-const Post = require('../../models/Post');
+const Post = require('../../models/Post.js');
 const authenticate = require('../../utils/authenticator.js')
 
 module.exports = {
@@ -41,6 +41,7 @@ module.exports = {
             });
 
             const savedPost = await newPost.save();
+            context.pubsub.publish('NEW_POST', { newPost: savedPost });
             return savedPost;
         },
 
@@ -60,6 +61,36 @@ module.exports = {
                 throw new UserInputError(`Post not found with id ${postId}`)
             }
 
+        },
+
+        async likePost(_, { postId }, context) {
+            const { username } = authenticate(context);
+
+            try {
+                const post = await Post.findById(postId);
+                if (post.username !== username) {
+                    if (post.likes.find(like => like.username === username)) {
+                        post.likes = post.likes.filter(like => like.username !== username);
+                    } else {
+                        post.likes.push({
+                            username: username,
+                            createdAt: new Date().toISOString()
+                        })
+                    }
+                } else {
+                    throw new UserInputError("User cannot like his/her own post");
+                }
+                const savedPost = await post.save();
+                return savedPost;
+            } catch (err) {
+                throw new UserInputError(err)
+            }
+        }
+    },
+
+    Subscription: {
+        newPost: {
+            subscribe: (_, __, { pubsub }) => pubsub.asyncIterator('NEW_POST')
         }
     }
 }
